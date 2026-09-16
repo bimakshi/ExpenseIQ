@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -7,21 +8,21 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   name      String?
-  email     String   @unique
+  email     String    @unique
   password  String
-  expenses  Expense[]
+  createdAt DateTime  @default(now())
   budgets   Budget[]
-  createdAt DateTime @default(now())
+  expenses  Expense[]
 }
 
 model Category {
   id       String    @id @default(cuid())
   name     String    @unique
   icon     String?
-  expenses Expense[]
   budgets  Budget[]
+  expenses Expense[]
 }
 
 model Expense {
@@ -29,11 +30,11 @@ model Expense {
   amount     Float
   note       String?
   date       DateTime
-  user       User     @relation(fields: [userId], references: [id])
   userId     String
-  category   Category @relation(fields: [categoryId], references: [id])
   categoryId String
   createdAt  DateTime @default(now())
+  category   Category @relation(fields: [categoryId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
 }
 
 model Budget {
@@ -41,11 +42,11 @@ model Budget {
   monthlyLimit Float
   month        Int
   year         Int
-  user         User     @relation(fields: [userId], references: [id])
   userId       String
-  category     Category @relation(fields: [categoryId], references: [id])
   categoryId   String
   createdAt    DateTime @default(now())
+  category     Category @relation(fields: [categoryId], references: [id])
+  user         User     @relation(fields: [userId], references: [id])
 
   @@unique([userId, categoryId, month, year])
 }
