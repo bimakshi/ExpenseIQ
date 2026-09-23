@@ -19,3 +19,55 @@ export async function GET() {
     );
   }
 }
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+
+    const name = body.name?.trim();
+
+    if (!name) {
+      return NextResponse.json(
+        { message: "Category name is required." },
+        { status: 400 }
+      );
+    }
+
+    const existingCategory = await prisma.category.findFirst({
+      where: {
+        name: {
+          equals: name,
+          mode: "insensitive",
+        },
+      },
+    });
+
+    if (existingCategory) {
+      return NextResponse.json(
+        { message: "Category already exists." },
+        { status: 409 }
+      );
+    }
+
+    const category = await prisma.category.create({
+      data: {
+        name,
+      },
+    });
+
+    return NextResponse.json(
+      {
+        message: "Category created successfully.",
+        category,
+      },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.error("Create category error:", error);
+
+    return NextResponse.json(
+      { message: "Something went wrong. Please try again." },
+      { status: 500 }
+    );
+  }
+}
