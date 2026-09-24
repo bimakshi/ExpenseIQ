@@ -5,10 +5,12 @@ import { useRouter } from "next/navigation";
 
 type DeleteExpenseButtonProps = {
   expenseId: string;
+  onDeleted?: () => void;
 };
 
 export default function DeleteExpenseButton({
   expenseId,
+  onDeleted,
 }: DeleteExpenseButtonProps) {
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
@@ -41,7 +43,11 @@ export default function DeleteExpenseButton({
         return;
       }
 
-      router.refresh();
+      if (onDeleted) {
+        onDeleted();
+      } else {
+        router.refresh();
+      }
     } catch {
       window.alert("Something went wrong. Please try again.");
     } finally {
