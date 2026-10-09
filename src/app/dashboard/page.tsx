@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-import LogoutButton from "./LogoutButton";
 import DashboardClient from "./components/DashboardClient";
 
 export default async function DashboardPage() {
@@ -75,76 +74,50 @@ export default async function DashboardPage() {
     totalBudget - currentMonthSpending;
 
   return (
-    <main className="min-h-screen px-6 py-10">
-      <div className="mx-auto max-w-5xl">
-        <div className="mb-8 flex items-center justify-between">
+    <main className="eq-main">
+      <div className="eq-content">
+        <div className="eq-page-heading">
           <div>
-            <h1 className="text-3xl font-semibold">
-              Dashboard
-            </h1>
-
-            <p className="mt-1 text-sm text-gray-600">
-              Welcome back,{" "}
-              {session.user.name || session.user.email}
+            <h1 className="eq-page-title">Overview</h1>
+            <p className="eq-page-description">
+              Welcome back, <span className="font-medium text-gray-900">{session.user.name || session.user.email}</span>. Here is your financial summary.
             </p>
           </div>
-
-          <LogoutButton />
         </div>
 
-        {/* Summary Cards */}
-        <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="rounded-xl border bg-white p-5">
-            <p className="text-sm text-gray-500">
-              Total Expenses
-            </p>
+        <div className="eq-summary-grid">
+          <section className="eq-summary-primary" aria-label="Monthly spending summary">
+            <div className="eq-summary-item">
+              <p className="eq-summary-label">This month spending</p>
+              <p className="eq-summary-value">Rs. {currentMonthSpending.toFixed(2)}</p>
+            </div>
+            <div className="eq-summary-subgrid">
+              <div className="eq-summary-item">
+                <p className="eq-summary-label">Total budget</p>
+                <p className="eq-summary-subvalue">Rs. {totalBudget.toFixed(2)}</p>
+              </div>
+              <div className="eq-summary-item">
+                <p className="eq-summary-label">Remaining budget</p>
+                <p className={`eq-summary-subvalue ${remainingBudget < 0 ? "is-over-budget" : "is-positive"}`}>
+                  Rs. {remainingBudget.toFixed(2)}
+                </p>
+              </div>
+            </div>
+          </section>
 
-            <p className="mt-2 text-2xl font-semibold">
-              Rs. {totalExpenses.toFixed(2)}
-            </p>
-          </div>
-
-          <div className="rounded-xl border bg-white p-5">
-            <p className="text-sm text-gray-500">
-              This Month Spending
-            </p>
-
-            <p className="mt-2 text-2xl font-semibold">
-              Rs. {currentMonthSpending.toFixed(2)}
-            </p>
-          </div>
-
-          <div className="rounded-xl border bg-white p-5">
-            <p className="text-sm text-gray-500">
-              Total Budget
-            </p>
-
-            <p className="mt-2 text-2xl font-semibold">
-              Rs. {totalBudget.toFixed(2)}
-            </p>
-          </div>
-
-          <div className="rounded-xl border bg-white p-5">
-            <p className="text-sm text-gray-500">
-              Remaining Budget
-            </p>
-
-            <p
-              className={`mt-2 text-2xl font-semibold ${
-                remainingBudget < 0
-                  ? "text-red-600"
-                  : "text-emerald-600"
-              }`}
-            >
-              Rs. {remainingBudget.toFixed(2)}
-            </p>
+          <div className="eq-summary-secondary">
+            <div>
+              <p className="eq-summary-label">All-time expenses</p>
+              <p className="eq-summary-value">Rs. {totalExpenses.toFixed(2)}</p>
+            </div>
+            <p className="eq-summary-description">Total recorded spending across all months and categories.</p>
           </div>
         </div>
 
         <DashboardClient
           expenses={expenses.map((expense) => ({
             ...expense,
-            date: expense.date.toISOString(),
+            date: new Date(expense.date).toISOString(),
           }))}
         />
       </div>

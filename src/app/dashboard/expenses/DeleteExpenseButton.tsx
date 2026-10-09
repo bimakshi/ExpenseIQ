@@ -60,7 +60,7 @@ export default function DeleteExpenseButton({
       type="button"
       onClick={handleDelete}
       disabled={isDeleting}
-      className="text-sm font-medium text-red-600 hover:text-red-700 disabled:opacity-50"
+      className="eq-btn-danger"
     >
       {isDeleting ? "Deleting..." : "Delete"}
     </button>

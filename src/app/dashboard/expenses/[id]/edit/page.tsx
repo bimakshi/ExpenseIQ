@@ -114,9 +114,15 @@ export default function EditExpensePage() {
 
   if (isLoading) {
     return (
-      <main className="min-h-screen px-6 py-10">
-        <div className="mx-auto max-w-2xl">
-          <p className="text-gray-600">Loading expense...</p>
+      <main className="eq-main">
+        <div className="eq-form-content">
+          <div className="eq-loading-state">
+            <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+            </svg>
+            <p>Loading expense details...</p>
+          </div>
         </div>
       </main>
     );
@@ -124,54 +130,71 @@ export default function EditExpensePage() {
 
   if (error && !expense) {
     return (
-      <main className="min-h-screen px-6 py-10">
-        <div className="mx-auto max-w-2xl">
-          <p className="text-red-600">{error}</p>
+      <main className="eq-main">
+        <div className="eq-form-content">
+          <div className="eq-alert-error">
+            <p className="m-0 text-base font-medium">{error}</p>
+            <button
+              onClick={() => router.push("/dashboard")}
+              className="eq-action-link"
+            >
+              Return to Dashboard
+            </button>
+          </div>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen px-6 py-10">
-      <div className="mx-auto max-w-2xl">
-        <h1 className="text-3xl font-semibold">Edit Expense</h1>
-
-        <p className="mt-1 text-sm text-gray-600">
-          Update your expense details
-        </p>
+    <main className="eq-main">
+      <div className="eq-form-content">
+        <div className="eq-page-heading">
+          <h1 className="eq-page-title">Edit Expense</h1>
+          <p className="eq-page-description">
+            Update the details for this expense.
+          </p>
+        </div>
 
         <form
           onSubmit={handleSubmit}
-          className="mt-8 rounded-xl border bg-white p-6"
+          className="eq-form-card"
         >
           {error && (
-            <div className="mb-5 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">
-              {error}
+            <div className="eq-alert-error">
+              <p className="m-0 text-base font-medium" role="alert">
+                {error}
+              </p>
             </div>
           )}
 
-          <div>
-            <label className="text-sm font-medium">Amount</label>
-
-            <input
-              type="number"
-              step="0.01"
-              min="0"
-              value={amount}
-              onChange={(event) => setAmount(event.target.value)}
-              className="mt-2 w-full rounded-lg border px-3 py-2 outline-none focus:border-emerald-600"
-              required
-            />
+          <div className="eq-field">
+            <label htmlFor="amount" className="eq-label">Amount</label>
+            <div className="relative">
+              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                <span className="text-gray-500 font-medium">Rs.</span>
+              </div>
+              <input
+                id="amount"
+                type="number"
+                step="0.01"
+                min="0"
+                value={amount}
+                onChange={(event) => setAmount(event.target.value)}
+                className="eq-input eq-amount-input"
+                required
+              />
+            </div>
           </div>
 
-          <div className="mt-5">
-            <label className="text-sm font-medium">Category</label>
+          <div className="eq-field">
+            <label htmlFor="category" className="eq-label">Category</label>
 
             <select
               value={categoryId}
               onChange={(event) => setCategoryId(event.target.value)}
-              className="mt-2 w-full rounded-lg border px-3 py-2 outline-none focus:border-emerald-600"
+              id="category"
+              className="eq-select w-full"
               required
             >
               <option value="">Select category</option>
@@ -184,45 +207,48 @@ export default function EditExpensePage() {
             </select>
           </div>
 
-          <div className="mt-5">
-            <label className="text-sm font-medium">Date</label>
+          <div className="eq-field">
+            <label htmlFor="date" className="eq-label">Date</label>
 
             <input
               type="date"
               value={date}
               onChange={(event) => setDate(event.target.value)}
-              className="mt-2 w-full rounded-lg border px-3 py-2 outline-none focus:border-emerald-600"
+              id="date"
+              className="eq-input"
               required
             />
           </div>
 
-          <div className="mt-5">
-            <label className="text-sm font-medium">Note</label>
+          <div className="eq-field">
+            <label htmlFor="note" className="eq-label">
+              Note <span className="font-normal text-gray-400">(Optional)</span>
+            </label>
 
             <textarea
               value={note}
               onChange={(event) => setNote(event.target.value)}
-              rows={4}
-              className="mt-2 w-full rounded-lg border px-3 py-2 outline-none focus:border-emerald-600"
-              placeholder="Optional note"
+              rows={3}
+              id="note"
+              className="eq-input eq-textarea"
+              placeholder="What was this expense for?"
             />
           </div>
 
-          <div className="mt-6 flex gap-3">
-            <button
-              type="submit"
-              disabled={isSaving}
-              className="rounded-lg bg-emerald-600 px-5 py-2 text-sm font-medium text-white hover:bg-emerald-700 disabled:opacity-50"
-            >
-              {isSaving ? "Saving..." : "Save Changes"}
-            </button>
-
+          <div className="eq-form-actions">
             <button
               type="button"
               onClick={() => router.push("/dashboard")}
-              className="rounded-lg border px-5 py-2 text-sm font-medium hover:bg-gray-50"
+              className="eq-btn-secondary"
             >
               Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={isSaving}
+              className="eq-btn-primary"
+            >
+              {isSaving ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </form>

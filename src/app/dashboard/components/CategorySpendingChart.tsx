@@ -13,6 +13,8 @@ type CategorySpending = {
   amount: number;
 };
 
+const COLORS = ["#059669", "#10b981", "#047857", "#34d399", "#065f46", "#6ee7b7", "#a7f3d0"];
+
 type CategorySpendingChartProps = {
   data: CategorySpending[];
 };
@@ -22,7 +24,7 @@ export default function CategorySpendingChart({
 }: CategorySpendingChartProps) {
   if (data.length === 0) {
     return (
-      <div className="flex h-72 items-center justify-center text-sm text-gray-500">
+      <div className="eq-chart-empty">
         No spending data available for this month.
       </div>
     );
@@ -40,9 +42,10 @@ export default function CategorySpendingChart({
             cy="50%"
             outerRadius={90}
             label
+            labelLine={{ stroke: "#a8a29e" }}
           >
-            {data.map((entry) => (
-              <Cell key={entry.category} />
+            {data.map((entry, index) => (
+              <Cell key={entry.category} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
 

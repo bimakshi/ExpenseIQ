@@ -25,7 +25,7 @@ export default function MonthlySpendingChart({
 }: MonthlySpendingChartProps) {
   if (data.length === 0) {
     return (
-      <div className="flex h-72 items-center justify-center text-sm text-gray-500">
+      <div className="eq-chart-empty">
         No monthly spending data available.
       </div>
     );
@@ -43,28 +43,35 @@ export default function MonthlySpendingChart({
             bottom: 10,
           }}
         >
-          <CartesianGrid strokeDasharray="3 3" />
+          <CartesianGrid stroke="#e7e5e4" strokeDasharray="2 4" vertical={false} />
 
           <XAxis
             dataKey="month"
-            tick={{ fontSize: 12 }}
+            tick={{ fontSize: 13, fill: "#57534e" }}
+            axisLine={{ stroke: "#d6d3d1" }}
+            tickLine={false}
           />
 
           <YAxis
-            tick={{ fontSize: 12 }}
+            tick={{ fontSize: 13, fill: "#57534e" }}
+            axisLine={false}
+            tickLine={false}
           />
 
           <Tooltip
             formatter={(value) =>
               `Rs. ${Number(value).toFixed(2)}`
             }
+            contentStyle={{ borderColor: "#e7e5e4", borderRadius: "4px", fontSize: 14 }}
           />
 
           <Line
             type="monotone"
             dataKey="amount"
+            stroke="#059669"
             strokeWidth={2}
-            dot={{ r: 4 }}
+            dot={{ r: 3, fill: "#059669", strokeWidth: 2, stroke: "#ffffff" }}
+            activeDot={{ r: 5, fill: "#059669", stroke: "#ffffff", strokeWidth: 2 }}
           />
         </LineChart>
       </ResponsiveContainer>

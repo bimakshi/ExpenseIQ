@@ -79,44 +79,48 @@ export default function NewExpensePage() {
   }
 
   return (
-    <main className="min-h-screen px-6 py-10">
-      <div className="mx-auto max-w-xl">
-        <div className="mb-8">
-          <h1 className="text-3xl font-semibold">Add Expense</h1>
-          <p className="mt-2 text-sm text-gray-600">
+    <main className="eq-main">
+      <div className="eq-form-content">
+        <div className="eq-page-heading">
+          <h1 className="eq-page-title">Add Expense</h1>
+          <p className="eq-page-description">
             Record a new expense to keep your spending up to date.
           </p>
         </div>
 
         <form
           onSubmit={handleSubmit}
-          className="space-y-5 rounded-xl border bg-white p-6"
+          className="eq-form-card"
         >
-          <div>
+          <div className="eq-field">
             <label
               htmlFor="amount"
-              className="mb-2 block text-sm font-medium"
+              className="eq-label"
             >
               Amount
             </label>
-
-            <input
-              id="amount"
-              type="number"
-              min="0.01"
-              step="0.01"
-              value={amount}
-              onChange={(event) => setAmount(event.target.value)}
-              required
-              placeholder="0.00"
-              className="w-full rounded-lg border px-4 py-3 outline-none focus:ring-2"
-            />
+            <div className="relative">
+              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                <span className="text-gray-500 font-medium">Rs.</span>
+              </div>
+              <input
+                id="amount"
+                type="number"
+                min="0.01"
+                step="0.01"
+                value={amount}
+                onChange={(event) => setAmount(event.target.value)}
+                required
+                placeholder="0.00"
+                className="eq-input eq-amount-input"
+              />
+            </div>
           </div>
 
-          <div>
+          <div className="eq-field">
             <label
               htmlFor="category"
-              className="mb-2 block text-sm font-medium"
+              className="eq-label"
             >
               Category
             </label>
@@ -127,7 +131,7 @@ export default function NewExpensePage() {
               onChange={(event) => setCategoryId(event.target.value)}
               required
               disabled={isLoadingCategories}
-              className="w-full rounded-lg border px-4 py-3 outline-none focus:ring-2 disabled:cursor-not-allowed disabled:bg-gray-100"
+              className="eq-select w-full"
             >
               <option value="">
                 {isLoadingCategories
@@ -143,10 +147,10 @@ export default function NewExpensePage() {
             </select>
           </div>
 
-          <div>
+          <div className="eq-field">
             <label
               htmlFor="date"
-              className="mb-2 block text-sm font-medium"
+              className="eq-label"
             >
               Date
             </label>
@@ -157,16 +161,16 @@ export default function NewExpensePage() {
               value={date}
               onChange={(event) => setDate(event.target.value)}
               required
-              className="w-full rounded-lg border px-4 py-3 outline-none focus:ring-2"
+              className="eq-input"
             />
           </div>
 
-          <div>
+          <div className="eq-field">
             <label
               htmlFor="note"
-              className="mb-2 block text-sm font-medium"
+              className="eq-label"
             >
-              Note
+              Note <span className="font-normal text-gray-400">(Optional)</span>
             </label>
 
             <textarea
@@ -174,24 +178,35 @@ export default function NewExpensePage() {
               value={note}
               onChange={(event) => setNote(event.target.value)}
               rows={3}
-              placeholder="Optional note"
-              className="w-full resize-none rounded-lg border px-4 py-3 outline-none focus:ring-2"
+              placeholder="What was this expense for?"
+              className="eq-input eq-textarea"
             />
           </div>
 
           {error && (
-            <p className="text-sm text-red-600" role="alert">
-              {error}
-            </p>
+            <div className="eq-alert-error">
+              <p className="m-0 text-base font-medium" role="alert">
+                {error}
+              </p>
+            </div>
           )}
 
-          <button
-            type="submit"
-            disabled={isSubmitting || isLoadingCategories}
-            className="w-full rounded-lg bg-emerald-600 px-4 py-3 font-medium text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {isSubmitting ? "Saving..." : "Add Expense"}
-          </button>
+          <div className="eq-form-actions">
+            <button
+              type="button"
+              onClick={() => router.push("/dashboard")}
+              className="eq-btn-secondary"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={isSubmitting || isLoadingCategories}
+              className="eq-btn-primary"
+            >
+              {isSubmitting ? "Saving..." : "Add Expense"}
+            </button>
+          </div>
         </form>
       </div>
     </main>

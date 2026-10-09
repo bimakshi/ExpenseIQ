@@ -89,83 +89,104 @@ export default function CategoriesPage() {
   }
 
   return (
-    <main className="min-h-screen px-6 py-10">
-      <div className="mx-auto max-w-4xl">
-        <div>
-          <h1 className="text-3xl font-semibold">Categories</h1>
+    <main className="eq-main">
+      <div className="eq-content eq-categories-content">
+        <div className="eq-page-heading">
+          <h1 className="eq-page-title">Categories</h1>
 
-          <p className="mt-1 text-sm text-gray-600">
+          <p className="eq-page-description">
             Manage your expense categories
           </p>
         </div>
 
-        <div className="mt-8 grid gap-6 md:grid-cols-3">
-          <section className="rounded-xl border bg-white p-6 md:col-span-1">
-            <h2 className="text-lg font-semibold">Add Category</h2>
+        <div className="eq-category-layout">
+          {/* Add Category */}
+          <section className="eq-category-form-panel">
+            <div className="eq-category-form-copy">
+              <h2 className="eq-section-title">Add Category</h2>
+              <p className="eq-category-note">Create a category to keep your expense records organized.</p>
+            </div>
 
-            <form onSubmit={handleSubmit} className="mt-5">
-              <label className="text-sm font-medium">
-                Category name
-              </label>
+            <div>
+              <form onSubmit={handleSubmit} className="eq-category-form">
+                <div className="eq-field">
+                  <label htmlFor="category-name" className="eq-label">
+                    Category name
+                  </label>
 
-              <input
-                type="text"
-                value={name}
-                onChange={(event) => setName(event.target.value)}
-                placeholder="e.g. Travel"
-                className="mt-2 w-full rounded-lg border px-3 py-2 outline-none focus:border-emerald-600"
-              />
+                  <input
+                    id="category-name"
+                    type="text"
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                    placeholder="e.g. Travel"
+                    className="eq-input"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isSaving}
+                  className="eq-btn-primary"
+                >
+                  {isSaving ? "Adding…" : "Add Category"}
+                </button>
+              </form>
 
               {error && (
-                <p className="mt-3 text-sm text-red-600">
+                <p className="eq-alert-error eq-category-form-alert" role="alert">
                   {error}
                 </p>
               )}
 
               {success && (
-                <p className="mt-3 text-sm text-emerald-600">
+                <p className="eq-alert-success eq-category-form-alert" role="status">
                   {success}
                 </p>
               )}
-
-              <button
-                type="submit"
-                disabled={isSaving}
-                className="mt-5 w-full rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 disabled:opacity-50"
-              >
-                {isSaving ? "Adding..." : "Add Category"}
-              </button>
-            </form>
+            </div>
           </section>
 
-          <section className="rounded-xl border bg-white p-6 md:col-span-2">
-            <h2 className="text-lg font-semibold">Your Categories</h2>
+          {/* Category List */}
+          <section className="eq-category-list-panel">
+            <div className="eq-category-list-heading">
+              <div>
+                <h2 className="eq-section-title">Your Categories</h2>
+                <p className="eq-category-note">Used to organize and filter your expenses</p>
+              </div>
+              {!isLoading && categories.length > 0 && (
+                <span className="eq-category-count">{categories.length} {categories.length === 1 ? "category" : "categories"}</span>
+              )}
+            </div>
 
             {isLoading ? (
-              <p className="mt-5 text-sm text-gray-600">
-                Loading categories...
+              <p className="eq-inline-message" role="status">
+                Loading categories…
               </p>
             ) : categories.length === 0 ? (
-              <p className="mt-5 text-sm text-gray-600">
-                No categories found.
-              </p>
+              <div className="eq-category-empty">
+                <div className="eq-category-empty-icon" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>
+                  </svg>
+                </div>
+                <p className="eq-category-empty-title">No categories yet</p>
+                <p className="eq-inline-message">Add a category above to start organizing your expenses.</p>
+              </div>
             ) : (
-              <div className="mt-5 divide-y">
-                {categories.map((category) => (
-                  <div
+              <ul className="eq-category-list">
+                {categories.map((category, index) => (
+                  <li
                     key={category.id}
-                    className="flex items-center justify-between py-3"
+                    className="eq-category-row"
                   >
-                    <span className="font-medium">
+                    <span className="eq-category-index" aria-hidden="true">{index + 1}</span>
+                    <span className="eq-category-name">
                       {category.name}
                     </span>
-
-                    <span className="text-xs text-gray-500">
-                      Category
-                    </span>
-                  </div>
+                  </li>
                 ))}
-              </div>
+              </ul>
             )}
           </section>
         </div>

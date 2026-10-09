@@ -126,43 +126,44 @@ export default function EditBudgetPage() {
 
   if (loading) {
     return (
-      <main className="p-6">
-        <p className="text-gray-600">Loading budget...</p>
+      <main className="eq-main">
+        <div className="eq-form-content"><p className="eq-inline-message">Loading budget...</p></div>
       </main>
     );
   }
 
   if (error && !monthlyLimit) {
     return (
-      <main className="p-6">
-        <p className="text-red-600">{error}</p>
+      <main className="eq-main">
+        <div className="eq-form-content"><p className="eq-alert-error">{error}</p></div>
       </main>
     );
   }
 
   return (
-    <main className="mx-auto max-w-2xl p-6">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Edit Budget</h1>
-        <p className="mt-1 text-sm text-gray-600">
+    <main className="eq-main">
+      <div className="eq-form-content">
+        <div className="eq-page-heading">
+        <h1 className="eq-page-title">Edit Budget</h1>
+        <p className="eq-page-description">
           Update your monthly budget.
         </p>
-      </div>
+        </div>
 
       <form
         onSubmit={handleSubmit}
-        className="space-y-5 rounded-xl border border-gray-200 bg-white p-6 shadow-sm"
+        className="eq-form-card"
       >
         {error && (
-          <div className="rounded-lg bg-red-50 p-3 text-sm text-red-700">
+          <div className="eq-alert-error" role="alert">
             {error}
           </div>
         )}
 
-        <div>
+        <div className="eq-field">
           <label
             htmlFor="monthlyLimit"
-            className="mb-1 block text-sm font-medium text-gray-700"
+            className="eq-label"
           >
             Monthly Limit
           </label>
@@ -175,14 +176,14 @@ export default function EditBudgetPage() {
             value={monthlyLimit}
             onChange={(event) => setMonthlyLimit(event.target.value)}
             required
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-emerald-500"
+            className="eq-input"
           />
         </div>
 
-        <div>
+        <div className="eq-field">
           <label
             htmlFor="category"
-            className="mb-1 block text-sm font-medium text-gray-700"
+            className="eq-label"
           >
             Category
           </label>
@@ -192,7 +193,7 @@ export default function EditBudgetPage() {
             value={categoryId}
             onChange={(event) => setCategoryId(event.target.value)}
             required
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-emerald-500"
+            className="eq-select w-full"
           >
             <option value="">Select category</option>
 
@@ -204,10 +205,10 @@ export default function EditBudgetPage() {
           </select>
         </div>
 
-        <div>
+        <div className="eq-field">
           <label
             htmlFor="month"
-            className="mb-1 block text-sm font-medium text-gray-700"
+            className="eq-label"
           >
             Month
           </label>
@@ -217,7 +218,7 @@ export default function EditBudgetPage() {
             value={month}
             onChange={(event) => setMonth(event.target.value)}
             required
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-emerald-500"
+            className="eq-select w-full"
           >
             <option value="">Select month</option>
 
@@ -229,10 +230,10 @@ export default function EditBudgetPage() {
           </select>
         </div>
 
-        <div>
+        <div className="eq-field">
           <label
             htmlFor="year"
-            className="mb-1 block text-sm font-medium text-gray-700"
+            className="eq-label"
           >
             Year
           </label>
@@ -244,28 +245,28 @@ export default function EditBudgetPage() {
             value={year}
             onChange={(event) => setYear(event.target.value)}
             required
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-emerald-500"
+            className="eq-input"
           />
         </div>
 
-        <div className="flex gap-3 pt-2">
-          <button
-            type="submit"
-            disabled={saving}
-            className="rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {saving ? "Saving..." : "Save Changes"}
-          </button>
-
+        <div className="eq-form-actions">
           <button
             type="button"
             onClick={() => router.push("/dashboard/budgets")}
-            className="rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="eq-btn-secondary"
           >
             Cancel
           </button>
+          <button
+            type="submit"
+            disabled={saving}
+            className="eq-btn-primary"
+          >
+            {saving ? "Saving..." : "Save Changes"}
+          </button>
         </div>
       </form>
+      </div>
     </main>
   );
 }

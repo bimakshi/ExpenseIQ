@@ -108,57 +108,68 @@ export default function DashboardAnalytics({
     }, [selectedMonth, selectedYear, refreshKey]);
 
     return (
-        <section className="mb-8">
-            <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                    <h2 className="text-xl font-semibold">
-                        Spending Analytics
-                    </h2>
-
-                    <p className="mt-1 text-sm text-gray-600">
-                        Overview of your spending patterns
-                    </p>
-                </div>
+        <section className="eq-section">
+            <div className="eq-section-heading">
+                <h2 className="eq-section-title eq-section-title-large">
+                    Analytics
+                </h2>
+                <p className="eq-section-description">
+                    Insights into your spending habits and trends
+                </p>
             </div>
 
             {isLoading ? (
-                <div className="grid gap-6 lg:grid-cols-2">
-                    <div className="h-96 animate-pulse rounded-xl border bg-gray-100" />
-
-                    <div className="h-96 animate-pulse rounded-xl border bg-gray-100" />
+                <div className="eq-analytics-grid">
+                    <div className="eq-analytics-skeleton eq-analytics-main" />
+                    <div className="eq-analytics-skeleton" />
                 </div>
             ) : error ? (
-                <div className="rounded-xl border border-red-200 bg-red-50 p-6">
-                    <p className="text-sm text-red-600">
+                <div className="eq-alert-error">
+                    <p className="m-0 text-base font-medium">
                         {error}
                     </p>
                 </div>
             ) : (
-                <div className="grid gap-6 lg:grid-cols-2">
-                    <div className="rounded-xl border bg-white p-6">
-                        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                            <div>
-                                <h3 className="font-semibold">
-                                    Spending by Category
-                                </h3>
+                <div className="eq-analytics-grid">
+                    <div className="eq-analytics-panel eq-analytics-main">
+                        <div className="eq-analytics-panel-heading">
+                            <h3 className="eq-section-title">
+                                Monthly Trend
+                            </h3>
+                            <p className="eq-section-description">
+                                6-month spending overview
+                            </p>
+                        </div>
 
-                                <p className="mt-1 text-sm text-gray-500">
-                                    Spending for{" "}
-                                    {monthNames[selectedMonth - 1]}{" "}
-                                    {selectedYear}
+                        <div className="eq-chart-area">
+                            <MonthlySpendingChart
+                                data={monthlyData}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="eq-analytics-panel">
+                        <div className="eq-analytics-panel-heading eq-category-chart-heading">
+                            <div>
+                                <h3 className="eq-section-title">
+                                    By Category
+                                </h3>
+                                <p className="eq-section-description">
+                                    {monthNames[selectedMonth - 1]} {selectedYear}
                                 </p>
                             </div>
 
-                            <div>
+                            <div className="eq-filter-control">
                                 <select
                                     id="analytics-month"
+                                    aria-label="Select month for category spending"
                                     value={selectedMonth}
                                     onChange={(event) =>
                                         setSelectedMonth(
                                             Number(event.target.value)
                                         )
                                     }
-                                    className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-500"
+                                    className="eq-select w-full"
                                 >
                                     {monthNames.map((month, index) => (
                                         <option
@@ -172,25 +183,11 @@ export default function DashboardAnalytics({
                             </div>
                         </div>
 
-                        <CategorySpendingChart
-                            data={categoryData}
-                        />
-                    </div>
-
-                    <div className="rounded-xl border bg-white p-6">
-                        <div className="mb-4">
-                            <h3 className="font-semibold">
-                                Monthly Spending
-                            </h3>
-
-                            <p className="mt-1 text-sm text-gray-500">
-                                Spending trend over the last 6 months
-                            </p>
+                        <div className="eq-chart-area eq-category-chart-area">
+                            <CategorySpendingChart
+                                data={categoryData}
+                            />
                         </div>
-
-                        <MonthlySpendingChart
-                            data={monthlyData}
-                        />
                     </div>
                 </div>
             )}
